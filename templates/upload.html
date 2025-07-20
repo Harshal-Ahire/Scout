@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Scout - Upload</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-white font-sans">
+
+  <!-- Updated Header (from landing page) -->
+  <header class="flex justify-between items-center px-10 py-2 border-b border-gray-200">
+    <img src="{{ url_for('static', filename='images/sc.PNG') }}" alt="Scout Logo" class="h-6 w-auto ml-12" style="filter: brightness(1.0) contrast(1.1);">
+  </header>
+
+  <main class="px-10 py-8 max-w-4xl mx-auto">
+    <h2 class="text-3xl font-semibold mb-6 text-gray-800">Upload Resumes and Job Descriptions</h2>
+
+    <form id="uploadForm" enctype="multipart/form-data">
+      <!-- Resumes -->
+      <div class="mb-8">
+        <h3 class="text-lg font-bold mb-2">Resumes</h3>
+        <div id="resumeDrop" class="dropzone cursor-pointer border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-gray-50 transition-all">
+          <p class="text-gray-700 mb-2 font-semibold">Drag & Drop multiple resumes or a ZIP file</p>
+          <p class="text-sm text-gray-500 mb-4">Accepted formats: .pdf, .docx, .zip</p>
+          <input type="file" id="resumeInput" name="resumes" hidden multiple />
+          <ul id="resumeList" class="mt-4 text-sm text-left"></ul>
+        </div>
+      </div>
+
+      <!-- JDs -->
+      <div class="mb-8">
+        <h3 class="text-lg font-bold mb-2">Job Descriptions</h3>
+        <div id="jdDrop" class="dropzone cursor-pointer border-2 border-dashed border-gray-300 rounded-xl p-10 text-center hover:bg-gray-50 transition-all">
+          <p class="text-gray-700 mb-2 font-semibold">Drag & Drop one or more JD files</p>
+          <p class="text-sm text-gray-500 mb-4">Accepted formats: .pdf, .docx, .txt</p>
+          <input type="file" id="jdInput" name="jds" hidden multiple />
+          <ul id="jdList" class="mt-4 text-sm text-left"></ul>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="text-center">
+        <button type="submit" id="submitBtn" disabled
+          class="px-8 py-3 rounded-full bg-gray-400 text-white cursor-not-allowed transition duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed enabled:bg-blue-500 enabled:hover:bg-white enabled:hover:text-black enabled:hover:border enabled:hover:border-black">
+          Submit
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <!-- JavaScript -->
+  <script src="{{ url_for('static', filename='js/stackedUpload.js') }}"></script>
+</body>
+</html>

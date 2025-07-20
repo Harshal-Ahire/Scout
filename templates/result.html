@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Scout - Shortlisted Profiles</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900"
+    />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  </head>
+
+  <body style='font-family: Inter, "Noto Sans", sans-serif;' class="bg-white">
+    <div class="min-h-screen flex flex-col">
+      
+      <!-- Header with resized and repositioned logo -->
+      <header class="flex justify-between items-center px-10 py-2 border-b border-gray-200">
+        <img src="{{ url_for('static', filename='images/sc.PNG') }}" alt="Scout Logo" class="h-6 w-auto ml-12" style="filter: brightness(1.0) contrast(1.1);">
+      </header>
+
+      <!-- Main Content -->
+      <div class="flex flex-col flex-1 px-40 py-5">
+        <h2 class="text-2xl font-medium text-left mb-5">Shortlisted Profiles</h2>
+
+        <!-- Table -->
+        <div class="overflow-hidden rounded-xl border border-[#dde0e4] bg-white mx-4">
+          <table class="w-full">
+            <thead class="bg-white text-left text-sm font-medium text-[#687582]">
+              <tr>
+                <th class="px-4 py-3 w-[20%]">Candidate Name</th>
+                <th class="px-4 py-3 w-[10%]">Rating</th>
+                <th class="px-4 py-3 w-[25%]">Key Skill</th>
+                <th class="px-4 py-3 w-[25%]">Reason</th>
+                <th class="px-4 py-3 w-[20%] text-center">Resume</th>
+              </tr>
+            </thead>
+            <tbody class="text-sm text-[#687582]">
+              {% for c in candidates %}
+              <tr class="border-t border-[#dde0e4]">
+                <td class="px-4 py-3 font-medium">{{ c.name }}</td>
+                <td class="px-4 py-3 font-semibold text-yellow-600">{{ c.score }}/5</td>
+                <td class="px-4 py-3">{{ c.skill }}</td>
+                <td class="px-4 py-3">{{ c.reason | safe }}</td>
+                <td class="px-4 py-3 text-center">
+                  <a href="{{ c.resume_url }}"
+                     class="text-blue-600 text-lg hover:underline"
+                     title="Download Resume">⭳</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Export Button -->
+        <div class="flex justify-end px-4 mt-4">
+          <form action="{{ url_for('export_csv') }}" method="post">
+            <button type="submit" class="px-8 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-white hover:text-black hover:border-black transition">
+              Export
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
