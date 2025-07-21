@@ -1,0 +1,7 @@
+Flask
+python-docx
+PyMuPDF
+python-dotenv
+google-generativeai
+Werkzeug
+
