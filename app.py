@@ -28,7 +28,6 @@ def allowed_file(filename, allowed_exts):
 def landing_page():
     return render_template('landing.html')
 
-
 @app.route('/upload')
 def upload_page():
     return render_template('upload.html')
@@ -129,6 +128,7 @@ def export_csv():
         download_name='top_candidates.csv'
     )
 
+# ✅ FINAL UPDATED BLOCK FOR RENDER COMPATIBILITY
 if __name__ == '__main__':
-    app.run(debug=True)
- 
+    port = int(os.environ.get('PORT', 10000))
+    app.run(host='0.0.0.0', port=port)
