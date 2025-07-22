@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.secret_key = 'scout_secret_key'
 
 # ✅ Updated to store uploads inside static/uploads/
-UPLOAD_FOLDER = os.path.join('scout_app','static', 'uploads')
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 RESUME_FOLDER = os.path.join(UPLOAD_FOLDER, 'resumes')
 JD_FOLDER = os.path.join(UPLOAD_FOLDER, 'job_descriptions')
 
