@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, send_from_directory, url_for, session, send_file 
+from flask import Flask, render_template, request, redirect, flash, send_from_directory, url_for, session, send_file
 import os
 import zipfile
 import time
@@ -10,125 +10,74 @@ from matcher import match_resumes  # Gemini logic happens here
 app = Flask(__name__)
 app.secret_key = 'scout_secret_key'
 
-# ✅ Updated to store uploads inside static/uploads/
-UPLOAD_FOLDER = os.path.join('static', 'uploads' , 'job_descriptions')
-RESUME_FOLDER = os.path.join(UPLOAD_FOLDER, 'resumes')
-JD_FOLDER = os.path.join(UPLOAD_FOLDER, 'job_descriptions')
+UPLOAD_FOLDER_JD = 'static/uploads/job_descriptions'
+UPLOAD_FOLDER_RESUME = 'static/uploads/resumes'
 
-ALLOWED_RESUME_EXT = {'pdf', 'docx'}
-ALLOWED_JD_EXT = {'pdf', 'txt', 'docx'}
-
-os.makedirs(RESUME_FOLDER, exist_ok=True)
-os.makedirs(JD_FOLDER, exist_ok=True)
-
-def allowed_file(filename, allowed_exts):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_exts
+os.makedirs(UPLOAD_FOLDER_JD, exist_ok=True)
+os.makedirs(UPLOAD_FOLDER_RESUME, exist_ok=True)
 
 @app.route('/')
-def landing_page():
-    return render_template('landing.html')
-
-@app.route('/upload')
-def upload_page():
-    return render_template('upload.html')
+def index():
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
-def upload_files():
+def upload():
+    if 'jd' not in request.files or 'resumes' not in request.files:
+        flash('No file part')
+        return redirect(request.url)
+
+    jd_file = request.files['jd']
     resume_files = request.files.getlist('resumes')
-    jd_files = request.files.getlist('jds')
 
-    for folder in [RESUME_FOLDER, JD_FOLDER]:
-        for f in os.listdir(folder):
-            try:
-                file_path = os.path.join(folder, f)
-                os.remove(file_path)
-            except PermissionError:
-                print(f"⚠️ Skipping locked file: {file_path}")
-                time.sleep(1)
+    if jd_file.filename == '' or all(resume.filename == '' for resume in resume_files):
+        flash('No selected file')
+        return redirect(request.url)
 
-    for file in resume_files:
-        if file and file.filename != '':
-            ext = file.filename.rsplit('.', 1)[-1].lower()
-            if ext == 'zip' and zipfile.is_zipfile(file):
-                zip_path = os.path.join(RESUME_FOLDER, secure_filename(file.filename))
-                file.save(zip_path)
-                with zipfile.ZipFile(zip_path) as zip_ref:
-                    zip_ref.extractall(RESUME_FOLDER)
-                os.remove(zip_path)
-            elif allowed_file(file.filename, ALLOWED_RESUME_EXT):
-                filename = secure_filename(file.filename)
-                file.save(os.path.join(RESUME_FOLDER, filename))
+    jd_filename = secure_filename(jd_file.filename)
+    jd_path = os.path.join(UPLOAD_FOLDER_JD, jd_filename)
+    jd_file.save(jd_path)
 
-    for file in jd_files:
-        if file and allowed_file(file.filename, ALLOWED_JD_EXT):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(JD_FOLDER, filename))
+    saved_resume_paths = []
+    for resume in resume_files:
+        if resume and resume.filename:
+            resume_filename = secure_filename(resume.filename)
+            resume_path = os.path.join(UPLOAD_FOLDER_RESUME, resume_filename)
+            resume.save(resume_path)
+            saved_resume_paths.append(resume_path)
 
-    top_candidates = match_resumes(RESUME_FOLDER, JD_FOLDER)
+    matched_results = match_resumes(jd_path, saved_resume_paths)
 
-    for c in top_candidates:
-        c["resume_url"] = url_for("download_resume", filename=c.get("file", "N/A"))
+    # Store matched results in session for download
+    session['matched_results'] = matched_results
 
-    session['candidates'] = top_candidates
+    return render_template('result.html', matched_results=matched_results)
 
-    return redirect(url_for('show_results'))
-
-@app.route('/results')
-def show_results():
-    candidates = session.get('candidates', [])
-    return render_template('result.html', candidates=candidates)
-
-# ✅ This now correctly matches static/uploads/resumes/
 @app.route('/download/<path:filename>')
 def download_resume(filename):
     resume_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static', 'uploads', 'resumes'))
     return send_from_directory(resume_folder, filename, as_attachment=True)
 
-@app.route('/export_csv', methods=['POST'])
-def export_csv():
-    candidates = session.get('candidates', [])
+@app.route('/download_csv')
+def download_csv():
+    matched_results = session.get('matched_results', [])
+
+    if not matched_results:
+        flash('No data to download.')
+        return redirect(url_for('index'))
 
     output = io.StringIO()
-    writer = csv.writer(output)
+    writer = csv.DictWriter(output, fieldnames=matched_results[0].keys())
+    writer.writeheader()
+    writer.writerows(matched_results)
 
-    writer.writerow([
-        "Candidate Name",
-        "Email Address",
-        "Phone Number (if available)",
-        "Resume Score / Match Score",
-        "Key Skills Matched",
-        "Education Summary",
-        "Experience Summary",
-        "Current Job Title (if parsed)",
-        "LinkedIn or Portfolio Links (if available)",
-        "Matched Job Title / Role",
-        "Reason for Shortlisting"
-    ])
+    mem = io.BytesIO()
+    mem.write(output.getvalue().encode('utf-8'))
+    mem.seek(0)
 
-    for c in candidates:
-        writer.writerow([
-            c.get("name", "-"),
-            c.get("email", "-"),
-            c.get("phone", "-"),
-            f"{c.get('score', '-')}/5",
-            c.get("skill", "-"),
-            c.get("education", "-"),
-            c.get("experience", "-"),
-            c.get("current_title", "-"),
-            c.get("links", "-"),
-            c.get("matched_role", "-"),
-            c.get("reason", "-").replace("<br>", " | ")
-        ])
+    return send_file(mem,
+                     mimetype='text/csv',
+                     download_name='matched_results.csv',
+                     as_attachment=True)
 
-    output.seek(0)
-    return send_file(
-        io.BytesIO(output.getvalue().encode('utf-8')),
-        mimetype='text/csv',
-        as_attachment=True,
-        download_name='top_candidates.csv'
-    )
-
-# ✅ FINAL UPDATED BLOCK FOR RENDER COMPATIBILITY
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 10000))
-    app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
