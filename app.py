@@ -55,7 +55,12 @@ def upload():
 @app.route('/download/<path:filename>')
 def download_resume(filename):
     resume_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static', 'uploads', 'resumes'))
+    file_path = os.path.join(resume_folder, filename)
+    print(f"[DEBUG] Trying to send file: {file_path}")
+    if not os.path.exists(file_path):
+        print("[ERROR] File does not exist!")
     return send_from_directory(resume_folder, filename, as_attachment=True)
+
 
 @app.route('/download_csv')
 def download_csv():
