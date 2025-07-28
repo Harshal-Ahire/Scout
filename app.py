@@ -10,8 +10,7 @@ from matcher import match_resumes  # Gemini logic happens here
 app = Flask(__name__)
 app.secret_key = 'scout_secret_key'
 
-# ✅ Updated to store uploads inside static/uploads/
-UPLOAD_FOLDER = os.path.join('static', 'uploads')
+UPLOAD_FOLDER = 'uploads'
 RESUME_FOLDER = os.path.join(UPLOAD_FOLDER, 'resumes')
 JD_FOLDER = os.path.join(UPLOAD_FOLDER, 'job_descriptions')
 
@@ -27,7 +26,6 @@ def allowed_file(filename, allowed_exts):
 @app.route('/')
 def landing_page():
     return render_template('landing.html')
-
 
 @app.route('/upload')
 def upload_page():
@@ -79,7 +77,7 @@ def show_results():
     candidates = session.get('candidates', [])
     return render_template('result.html', candidates=candidates)
 
-# ✅ This now correctly matches static/uploads/resumes/
+# ✅ Updated to use absolute path to /scout_app/static/uploads/resumes
 @app.route('/download/<path:filename>')
 def download_resume(filename):
     resume_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), 'static', 'uploads', 'resumes'))
@@ -131,4 +129,3 @@ def export_csv():
 
 if __name__ == '__main__':
     app.run(debug=True)
- 
