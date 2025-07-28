@@ -10,7 +10,7 @@ from matcher import match_resumes  # Gemini logic happens here
 app = Flask(__name__)
 app.secret_key = 'scout_secret_key'
 
-UPLOAD_FOLDER = ('static','uploads')
+UPLOAD_FOLDER = os.path.join('static', 'uploads')  # ✅ FIXED
 RESUME_FOLDER = os.path.join(UPLOAD_FOLDER, 'resumes')
 JD_FOLDER = os.path.join(UPLOAD_FOLDER, 'job_descriptions')
 
