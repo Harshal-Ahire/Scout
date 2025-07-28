@@ -28,11 +28,10 @@
           <table class="w-full">
             <thead class="bg-white text-left text-sm font-medium text-[#687582]">
               <tr>
-                <th class="px-4 py-3 w-[20%]">Candidate Name</th>
+                <th class="px-4 py-3 w-[25%]">Candidate Name</th>
                 <th class="px-4 py-3 w-[10%]">Rating</th>
-                <th class="px-4 py-3 w-[25%]">Key Skill</th>
-                <th class="px-4 py-3 w-[25%]">Reason</th>
-                <th class="px-4 py-3 w-[20%] text-center">Resume</th>
+                <th class="px-4 py-3 w-[30%]">Key Skill</th>
+                <th class="px-4 py-3 w-[35%]">Reason</th>
               </tr>
             </thead>
             <tbody class="text-sm text-[#687582]">
@@ -42,11 +41,6 @@
                 <td class="px-4 py-3 font-semibold text-yellow-600">{{ c.score }}/5</td>
                 <td class="px-4 py-3">{{ c.skill }}</td>
                 <td class="px-4 py-3">{{ c.reason | safe }}</td>
-                <td class="px-4 py-3 text-center">
-                  <a href="{{ c.resume_url }}"
-                     class="text-blue-600 text-lg hover:underline"
-                     title="Download Resume">⭳</a>
-                </td>
               </tr>
               {% endfor %}
             </tbody>
