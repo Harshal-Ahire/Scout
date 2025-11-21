@@ -46,7 +46,7 @@ def match_resumes(resume_folder, jd_folder):
         print("⚠️ No JD content found.")
         return []
 
-    model = genai.GenerativeModel(model_name="models/gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.0-flash")
     candidates = []
 
     for resume_file in os.listdir(resume_folder):
@@ -171,3 +171,4 @@ Matched Role: <role>
             continue
 
     return sorted(candidates, key=lambda x: x["score"], reverse=True)[:5]
+
