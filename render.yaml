@@ -6,4 +6,4 @@ services:
     startCommand: python app.py
     envVars:
       - key: GEMINI_API_KEY
-        value: AIzaSyCxbpCoNTCHm-JhPSwxdP_V8MDhyctAfDE
+        value: AIzaSyDb7E5UxQR3Qy_52239bUsgMOliBROIIUc
