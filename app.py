@@ -5,12 +5,12 @@ import time
 import io
 import csv
 from werkzeug.utils import secure_filename
-from matcher import match_resumes  # Gemini logic happens here
+from matcher import match_resumes
 
 app = Flask(__name__)
 app.secret_key = 'scout_secret_key'
 
-UPLOAD_FOLDER = os.path.join('static', 'uploads')  # ✅ FIXED
+UPLOAD_FOLDER = os.path.join('static', 'uploads')
 RESUME_FOLDER = os.path.join(UPLOAD_FOLDER, 'resumes')
 JD_FOLDER = os.path.join(UPLOAD_FOLDER, 'job_descriptions')
 
@@ -48,15 +48,25 @@ def upload_files():
     for file in resume_files:
         if file and file.filename != '':
             ext = file.filename.rsplit('.', 1)[-1].lower()
+            
+            # -----------------------------------------------------------------
+            # START OF CORRECTED ZIP HANDLING BLOCK
             if ext == 'zip' and zipfile.is_zipfile(file):
+                # *** FIX IS HERE *** Rewind the pointer to the start of the file stream
+                file.seek(0) 
+                
                 zip_path = os.path.join(RESUME_FOLDER, secure_filename(file.filename))
-                file.save(zip_path)
+                file.save(zip_path) # <-- Now saves the complete file
                 with zipfile.ZipFile(zip_path) as zip_ref:
                     zip_ref.extractall(RESUME_FOLDER)
                 os.remove(zip_path)
+            
+            # The 'elif' now correctly follows the 'if' block above
             elif allowed_file(file.filename, ALLOWED_RESUME_EXT):
                 filename = secure_filename(file.filename)
                 file.save(os.path.join(RESUME_FOLDER, filename))
+            # END OF CORRECTED ZIP HANDLING BLOCK
+            # -----------------------------------------------------------------
 
     for file in jd_files:
         if file and allowed_file(file.filename, ALLOWED_JD_EXT):
