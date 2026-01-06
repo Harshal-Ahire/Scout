@@ -2,8 +2,6 @@
 
 Scout is a production-ready recruitment platform that leverages **Gemini 2.0 Flash** to automate candidate screening. By shifting from traditional keyword-based filters to **semantic analysis**, Scout identifies the best-fit candidates based on context, skill depth, and experience.
 
-
-
 ## Project Overview
 
 The system provides an end-to-end pipeline for HR teams to process bulk resumes against multiple job descriptions. It handles the complexity of unstructured data parsing, AI inference, and structured data export in a single unified interface.
@@ -33,31 +31,18 @@ The system provides an end-to-end pipeline for HR teams to process bulk resumes 
 3. **Inference**: Normalized text is fed into a structured prompt. The model performs a dual-track task: qualitative screening and quantitative entity extraction.
 4. **Output**: Data is serialized into a session-managed object for real-time display and dynamic CSV generation.
 
-## Installation and Deployment
+## Performance Impact
 
-### Local Setup
+* **Process Automation**: Reduces manual screening time by approximately 65% through bulk ingestion and automated scoring.
+* **Data Accuracy**: Improves candidate matching by moving beyond keyword frequency to semantic role alignment.
+* **System Reliability**: Maintains uptime during peak loads using automated rate-limit handling.
 
-pip install -r requirements.txt
-GEMINI_API_KEY=your_api_key_here
-python app.py
+## Deployment Configuration
 
-Cloud Deployment (Render)
-This repository is configured for immediate deployment on Render via the included render.yaml.
+This repository is pre-configured for **Render** via the `render.yaml` specification:
+* **Plan**: Free / Starter
+* **Runtime**: Python 3.10+
+* **Environment Variables**: Managed via Render dashboard (GEMINI_API_KEY)
+* **Build Optimization**: Automatic dependency resolution via pip
 
-Service Type: Web Service
-
-Build Command: pip install -r requirements.txt
-
-Start Command: python app.py
-
-Performance Impact
-Process Automation: Reduces manual screening time by approximately 65% through bulk ingestion and automated scoring.
-
-Data Accuracy: Improves candidate matching by moving beyond keyword frequency to semantic role alignment.
-
-System Reliability: Maintains uptime during peak loads using automated rate-limit handling
-
-
-1. Clone the repository:
-   ```bash
-   git clone [https://github.com/yourusername/scout-ai.git](https://github.com/yourusername/scout-ai.git)
+---
