@@ -1,9 +1,7 @@
 const resumeStack = [];
 const jdStack = [];
 
-/**
- * Updates the visual list of files on the UI.
- */
+// Updates the visual list of files on the UI
 function updateFileList(listId, stack, inputType) {
   const list = document.getElementById(listId);
   list.innerHTML = '';
@@ -20,9 +18,7 @@ function updateFileList(listId, stack, inputType) {
   });
 }
 
-/**
- * Removes a specific file from the stack and updates the UI.
- */
+// Removes a specific file from the stack and updates the UI
 function removeFile(event, type, index) {
   // Prevent parent dropzone from triggering file input when clicking remove
   event.stopPropagation(); 
@@ -40,9 +36,7 @@ function removeFile(event, type, index) {
   checkFiles();
 }
 
-/**
- * Enables or disables the submit button based on file presence.
- */
+// Enables or disables the submit button based on file presence
 function checkFiles() {
   const submitBtn = document.getElementById("submitBtn");
 
@@ -97,9 +91,7 @@ document.getElementById('jdInput').addEventListener('change', (e) => {
   checkFiles();
 });
 
-/**
- * Initializes Drag and Drop functionality for a given zone.
- */
+// Initializes Drag and Drop functionality for a given zone
 function makeDropZone(id, stack, listId, inputType) {
   const dropZone = document.getElementById(id);
 
