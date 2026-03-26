@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scout - Shortlisted Profiles</title>
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
     <link
@@ -14,16 +15,16 @@
   <body style='font-family: Inter, "Noto Sans", sans-serif;' class="bg-white">
     <div class="min-h-screen flex flex-col">
       
-      <!-- Header with resized and repositioned logo -->
+      // Navigation header with company logo
       <header class="flex justify-between items-center px-10 py-2 border-b border-gray-200">
         <img src="{{ url_for('static', filename='images/sc.PNG') }}" alt="Scout Logo" class="h-6 w-auto ml-12" style="filter: brightness(1.0) contrast(1.1);">
       </header>
 
-      <!-- Main Content -->
+      // Main results container
       <div class="flex flex-col flex-1 px-40 py-5">
         <h2 class="text-2xl font-medium text-left mb-5">Shortlisted Profiles</h2>
 
-        <!-- Table -->
+        // Candidate data table
         <div class="overflow-hidden rounded-xl border border-[#dde0e4] bg-white mx-4">
           <table class="w-full">
             <thead class="bg-white text-left text-sm font-medium text-[#687582]">
@@ -44,8 +45,8 @@
                 <td class="px-4 py-3">{{ c.reason | safe }}</td>
                 <td class="px-4 py-3 text-center">
                   <a href="{{ c.resume_url }}"
-                     class="text-blue-600 text-lg hover:underline"
-                     title="Download Resume">⭳</a>
+                     class="text-blue-600 text-sm hover:underline font-medium"
+                     title="Download Resume">Download</a>
                 </td>
               </tr>
               {% endfor %}
@@ -53,11 +54,11 @@
           </table>
         </div>
 
-        <!-- Export Button -->
+        // Export functionality for CSV generation
         <div class="flex justify-end px-4 mt-4">
           <form action="{{ url_for('export_csv') }}" method="post">
-            <button type="submit" class="px-8 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-white hover:text-black hover:border-black transition">
-              Export
+            <button type="submit" class="px-8 py-3 rounded-full border border-blue-500 bg-blue-500 text-white hover:bg-white hover:text-black hover:border-black transition-all duration-200">
+              Export to CSV
             </button>
           </form>
         </div>
