@@ -1,131 +1,120 @@
-# SCOUT — AI Talent Acquisition Engine
+# SCOUT — AI Recruitment Workflow Engine
 
-Scout is a production-grade recruitment platform that uses **Google Gemini 2.0 Flash** to automate candidate screening through **semantic analysis**, replacing traditional keyword-based filtering with context-aware evaluation.
+Scout is a production-oriented AI system that automates candidate screening using **semantic evaluation pipelines** powered by Google Gemini 2.0 Flash.
 
-Instead of matching resumes based on surface-level keywords, Scout analyzes **skill relevance, experience depth, and role alignment** to identify high-quality candidates at scale.
+Instead of relying on keyword matching, Scout evaluates resumes based on **context, skill depth, and role alignment**, enabling more accurate and scalable hiring decisions.
 
 ---
 
 ## Overview
 
-Scout provides an end-to-end pipeline for processing large volumes of resumes against multiple job descriptions. It handles:
+Scout is designed as a **multi-stage AI pipeline** that processes unstructured resumes and transforms them into structured, decision-ready data.
 
-- Unstructured document ingestion  
+It handles:
+- Bulk document ingestion  
 - Format normalization  
-- LLM-based evaluation  
+- LLM-based semantic evaluation  
 - Structured output generation  
 
-All within a unified system designed for **high-throughput recruitment workflows**.
+The system is built to operate reliably in **high-volume, real-world recruitment workflows**.
 
 ---
 
-## Core Features
+## Key Capabilities
 
 - **Semantic Candidate Evaluation**  
-  Uses LLMs to assess resumes beyond keyword matching, capturing contextual relevance and domain expertise.
+  Uses LLMs to assess resumes based on contextual relevance rather than keyword frequency.
 
-- **Bulk Resume Processing**  
-  Supports ZIP-based ingestion and individual uploads (PDF, DOCX, TXT) for scalable candidate screening.
+- **High-Throughput Processing**  
+  Supports batch ingestion via ZIP uploads and individual files (PDF, DOCX, TXT).
 
 - **Document Normalization Pipeline**  
-  Converts heterogeneous file formats into clean, structured text optimized for LLM input.
+  Converts heterogeneous formats into clean, structured text suitable for AI processing.
+
+- **Agentic Workflow Execution**  
+  Implements a multi-step pipeline where the LLM interacts with structured prompts and downstream tools (parsers, CSV generators) to complete end-to-end evaluation.
 
 - **Resilient Inference Layer**  
-  Implements retry and exponential backoff for handling API rate limits (HTTP 429), ensuring stability under load.
+  Handles API rate limits and failures using retry logic and exponential backoff.
 
 - **Structured Output Generation**  
-  Transforms AI-generated insights into CSV format for integration with HR systems and analytics workflows.
+  Converts AI outputs into CSV format for integration with HR systems and analytics pipelines.
 
 ---
 
 ## System Architecture
 
 ```
-Upload Interface → File Extraction → Text Normalization → LLM Inference → Structured Output
+Upload → Extraction → Normalization → LLM Inference → Structured Output
 ```
 
-### Pipeline Breakdown
+---
+
+## Pipeline Breakdown
 
 1. **Ingestion**  
-   Files are uploaded via a drag-and-drop interface. ZIP archives are extracted server-side.
+   Accepts bulk and individual uploads; extracts files from archives.
 
 2. **Normalization**  
-   Documents are parsed and cleaned to remove formatting artifacts, producing consistent text input.
+   Parses and cleans documents to produce consistent input.
 
 3. **Inference**  
-   The LLM performs:
-   - Semantic candidate evaluation  
+   Performs:
+   - Semantic evaluation  
    - Skill/entity extraction  
    - Relevance scoring  
 
 4. **Output Layer**  
-   Results are stored in session state and exported as structured CSV data.
-
----
-
-## Technical Stack
-
-- **Backend**: Python (Flask)  
-- **AI Engine**: Google Gemini 2.0 Flash  
-- **Parsing**: PyMuPDF (`fitz`), `python-docx`  
-- **Frontend**: JavaScript (custom upload manager), Tailwind CSS  
-- **Deployment**: Render (Web Service architecture)  
+   Stores results and generates structured CSV outputs.
 
 ---
 
 ## Engineering Highlights
 
-- **LLM-Driven Decision Layer**  
-  Replaces rule-based filtering with semantic reasoning for higher-quality candidate selection.
+- **AI Embedded in Production Workflows**  
+  LLMs are integrated into a structured pipeline rather than used as isolated API calls.
 
-- **Pipeline-Oriented Design**  
-  Clear separation between ingestion, transformation, inference, and output stages.
+- **Pipeline-Oriented Architecture**  
+  Clear separation between ingestion, transformation, inference, and output layers.
 
-- **Failure Handling & Stability**  
-  Rate-limit mitigation ensures consistent performance during bulk processing.
+- **Robustness & Reliability**  
+  Designed to handle noisy, real-world data and API constraints.
 
-- **Scalable Input Handling**  
-  Designed to process large batches of resumes efficiently without degrading system performance.
+- **Scalable Processing**  
+  Efficiently processes large batches of resumes without performance degradation.
 
 ---
 
 ## Performance Impact
 
-- **~65% Reduction in Manual Screening Time**  
-  Automated bulk evaluation significantly reduces recruiter workload.
-
-- **Improved Matching Accuracy**  
-  Context-aware analysis outperforms keyword-based filtering in identifying relevant candidates.
-
-- **High Throughput Reliability**  
-  Maintains stable operation under concurrent processing conditions.
+- ~65% reduction in manual screening effort  
+- Improved candidate matching through semantic analysis  
+- Stable processing under concurrent workloads  
 
 ---
 
-## Deployment
+## Tech Stack
 
-This project is pre-configured for deployment on **Render** using `render.yaml`.
-
-- **Plan**: Free / Starter  
-- **Runtime**: Python 3.10+  
+- **Backend**: Python (Flask)  
+- **AI Engine**: Google Gemini 2.0 Flash  
+- **Parsing**: PyMuPDF (`fitz`), python-docx  
+- **Frontend**: JavaScript, Tailwind CSS  
+- **Deployment**: Render  
 
 ---
 
 ## Future Improvements
 
-- Advanced ranking models for candidate scoring  
-- Feedback loop for recruiter-in-the-loop learning  
+- Embedding-based candidate ranking (vector similarity search)  
+- Human-in-the-loop feedback system  
 - Integration with ATS/HRIS platforms  
-- Model evaluation benchmarks and scoring validation  
+- Evaluation benchmarks for model performance  
 
 ---
 
-## Notes
+## Design Philosophy
 
-Scout is designed as a **practical AI system**, focusing on:
-
-- Real-world usability over theoretical complexity  
-- Scalable document processing pipelines  
-- Reliable LLM integration under production constraints  
-
----
+Scout is built as a **practical AI system**, focusing on:
+- Reliability over experimentation  
+- Workflow integration over isolated intelligence  
+- Scalable processing of real-world data  
