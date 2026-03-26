@@ -5,16 +5,18 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import time
 
-# === Load API Key from .env ===
+# Load API Key from environment variables
 load_dotenv()
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
-# === Read file content safely ===
 def read_file_text(file_path):
+    """
+    Safely reads text content from PDF, DOCX, or TXT files.
+    """
     ext = file_path.rsplit('.', 1)[-1].lower()
 
     if not os.path.exists(file_path):
-        print(f"❌ File not found: {file_path}")
+        print(f"File not found: {file_path}")
         return ""
 
     try:
@@ -27,12 +29,15 @@ def read_file_text(file_path):
             with open(file_path, 'r', encoding='utf-8') as f:
                 return f.read()
     except Exception as e:
-        print(f"❌ Error reading {file_path}: {e}")
+        print(f"Error reading {file_path}: {e}")
         return ""
+    
     return ""
 
-# === Gemini Matching Logic ===
 def match_resumes(resume_folder, jd_folder):
+    """
+    Processes resumes and job descriptions using Gemini to find the best matches.
+    """
     jd_texts = []
     for jd_file in os.listdir(jd_folder):
         jd_path = os.path.join(jd_folder, jd_file)
@@ -43,7 +48,7 @@ def match_resumes(resume_folder, jd_folder):
     jd_combined = "\n\n".join(jd_texts).strip()
 
     if not jd_combined:
-        print("⚠️ No JD content found.")
+        print("No Job Description content found.")
         return []
 
     model = genai.GenerativeModel("gemini-2.0-flash")
@@ -54,7 +59,7 @@ def match_resumes(resume_folder, jd_folder):
         resume_text = read_file_text(resume_path).strip()
 
         if not resume_text:
-            print(f"⚠️ Skipping empty resume: {resume_file}")
+            print(f"Skipping empty resume: {resume_file}")
             continue
 
         prompt = f"""
@@ -105,7 +110,7 @@ Matched Role: <role>
             response = model.generate_content(prompt)
             output = response.text.strip()
 
-            # === Use filename as fallback if name is not found ===
+            # Initialize variables with fallbacks
             default_name = os.path.splitext(resume_file)[0]
             name = default_name
             rating = "0"
@@ -164,11 +169,11 @@ Matched Role: <role>
             })
 
         except Exception as e:
-            print(f"❌ Gemini failed for {resume_file}: {e}")
+            print(f"LLM processing failed for {resume_file}: {e}")
             if "429" in str(e):
-                print("⏳ Rate limit hit. Waiting before retrying...")
+                print("Rate limit exceeded. Waiting before retrying...")
                 time.sleep(60)
             continue
 
+    # Return top 5 candidates sorted by score
     return sorted(candidates, key=lambda x: x["score"], reverse=True)[:5]
-
