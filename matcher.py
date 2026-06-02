@@ -1,18 +1,18 @@
 import os
 import fitz  # PyMuPDF
 from docx import Document
-import google.generativeai as genai
+from google import genai  # Upgraded import
 from dotenv import load_dotenv
 import time
 
 # Load API Key from environment variables
 load_dotenv()
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+# Initialize the modern client (it automatically picks up GEMINI_API_KEY from environment)
+client = genai.Client()
 
 def read_file_text(file_path):
-    """
-    Safely reads text content from PDF, DOCX, or TXT files.
-    """
+    """Safely reads text content from PDF, DOCX, or TXT files."""
     ext = file_path.rsplit('.', 1)[-1].lower()
 
     if not os.path.exists(file_path):
@@ -35,9 +35,7 @@ def read_file_text(file_path):
     return ""
 
 def match_resumes(resume_folder, jd_folder):
-    """
-    Processes resumes and job descriptions using Gemini to find the best matches.
-    """
+    """Processes resumes and job descriptions using Gemini to find the best matches."""
     jd_texts = []
     for jd_file in os.listdir(jd_folder):
         jd_path = os.path.join(jd_folder, jd_file)
@@ -51,7 +49,6 @@ def match_resumes(resume_folder, jd_folder):
         print("No Job Description content found.")
         return []
 
-    model = genai.GenerativeModel("gemini-2.0-flash")
     candidates = []
 
     for resume_file in os.listdir(resume_folder):
@@ -107,7 +104,11 @@ Matched Role: <role>
 """
 
         try:
-            response = model.generate_content(prompt)
+            # Modern SDK syntax using client.models.generate_content
+            response = client.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=prompt,
+            )
             output = response.text.strip()
 
             # Initialize variables with fallbacks
@@ -175,5 +176,4 @@ Matched Role: <role>
                 time.sleep(60)
             continue
 
-    # Return top 5 candidates sorted by score
     return sorted(candidates, key=lambda x: x["score"], reverse=True)[:5]
