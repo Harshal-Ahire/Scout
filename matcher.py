@@ -103,7 +103,7 @@ Matched Role: <role>
 """
 
         try:
-            # CHANGED: Switched from gemini-2.0-flash to gemini-1.5-flash to bypass the quota lock
+            # FIXED: Target the exact structural string identity key for the modern SDK v1beta framework
             response = client.models.generate_content(
                 model="gemini-1.5-flash",
                 contents=prompt,
@@ -170,8 +170,6 @@ Matched Role: <role>
 
         except Exception as e:
             print(f"LLM processing failed for {resume_file}: {e}")
-            # CHANGED: Completely removed time.sleep(60) to prevent Gunicorn worker crashes.
-            # Breaking out of the loop gracefully allows the application to serve parsed items.
             if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
                 print("Quota limit encountered. Gracefully stopping batch processing.")
                 break
