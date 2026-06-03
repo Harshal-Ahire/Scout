@@ -105,7 +105,7 @@ Matched Role: <role>
         try:
             # FIXED: Target the exact structural string identity key for the modern SDK v1beta framework
             response = client.models.generate_content(
-                model="gemini-1.5-flash",
+                model="gemini-2.5-flash",
                 contents=prompt,
             )
             output = response.text.strip()
