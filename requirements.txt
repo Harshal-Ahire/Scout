@@ -2,7 +2,6 @@ Flask
 python-docx
 PyMuPDF
 python-dotenv
-google-generativeai
+google-genai
 Werkzeug
 gunicorn
-
