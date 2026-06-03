@@ -3,7 +3,7 @@ services:
     name: ai-resume-matcher
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: python app.py
+    startCommand: gunicorn app:app
     envVars:
       - key: GEMINI_API_KEY
-        value: AIzaSyDb7E5UxQR3Qy_52239bUsgMOliBROIIUc
+        sync: false
