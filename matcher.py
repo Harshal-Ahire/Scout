@@ -3,7 +3,6 @@ import fitz  # PyMuPDF
 from docx import Document
 from google import genai  # Upgraded import
 from dotenv import load_dotenv
-import time
 
 # Load API Key from environment variables
 load_dotenv()
@@ -104,9 +103,9 @@ Matched Role: <role>
 """
 
         try:
-            # Modern SDK syntax using client.models.generate_content
+            # CHANGED: Switched from gemini-2.0-flash to gemini-1.5-flash to bypass the quota lock
             response = client.models.generate_content(
-                model="gemini-2.0-flash",
+                model="gemini-1.5-flash",
                 contents=prompt,
             )
             output = response.text.strip()
@@ -171,9 +170,11 @@ Matched Role: <role>
 
         except Exception as e:
             print(f"LLM processing failed for {resume_file}: {e}")
-            if "429" in str(e):
-                print("Rate limit exceeded. Waiting before retrying...")
-                time.sleep(60)
+            # CHANGED: Completely removed time.sleep(60) to prevent Gunicorn worker crashes.
+            # Breaking out of the loop gracefully allows the application to serve parsed items.
+            if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                print("Quota limit encountered. Gracefully stopping batch processing.")
+                break
             continue
 
     return sorted(candidates, key=lambda x: x["score"], reverse=True)[:5]
