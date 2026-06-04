@@ -103,38 +103,47 @@ def download_resume(filename):
 @app.route('/export_csv', methods=['POST'])
 def export_csv():
     candidates = session.get('candidates', [])
-
     output = io.StringIO()
     writer = csv.writer(output)
 
     # Define CSV Header
     writer.writerow([
+        "Rank",
         "Candidate Name",
+        "Match Score",
+        "Shortlist Status",
+        "Key Skills Matched",
+        "Experience Summary",
+        "Education Summary",
+        "Matched Role",
+        "Shortlisting Reasons",
         "Email Address",
         "Phone Number",
-        "Match Score",
-        "Key Skills Matched",
-        "Education Summary",
-        "Experience Summary",
-        "Current Job Title",
-        "Links",
-        "Matched Role",
-        "Shortlisting Reason"
+        "LinkedIn"
     ])
 
-    for c in candidates:
+    for rank, c in enumerate(candidates, start=1):
+        score = c.get("score", 0)
+        if score >= 4.0:
+            status = "Yes"
+        elif score >= 3.0:
+            status = "Maybe"
+        else:
+            status = "No"
+
         writer.writerow([
+            rank,
             c.get("name", "-"),
+            f"{score}/5",
+            status,
+            c.get("skill", "-"),
+            c.get("experience", "-"),
+            c.get("education", "-"),
+            c.get("matched_role", "-"),
+            c.get("reason", "-").replace("<br>", " | "),
             c.get("email", "-"),
             c.get("phone", "-"),
-            f"{c.get('score', '-')}/5",
-            c.get("skill", "-"),
-            c.get("education", "-"),
-            c.get("experience", "-"),
-            c.get("current_title", "-"),
-            c.get("links", "-"),
-            c.get("matched_role", "-"),
-            c.get("reason", "-").replace("<br>", " | ")
+            c.get("linkedin", "-")
         ])
 
     output.seek(0)
