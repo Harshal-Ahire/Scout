@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Initialize the modern client (it automatically picks up GEMINI_API_KEY from environment)
-client = genai.Client()
+client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY"))
 
 def read_file_text(file_path):
     """Safely reads text content from PDF, DOCX, or TXT files."""
