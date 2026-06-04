@@ -2,6 +2,6 @@ Flask
 python-docx
 PyMuPDF
 python-dotenv
-google-genai
+google-genai==1.16.0
 Werkzeug
 gunicorn
