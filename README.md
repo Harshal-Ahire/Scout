@@ -1,3 +1,6 @@
+<img width="1475" height="704" alt="Results" src="https://github.com/user-attachments/assets/0045ecdd-7b9b-43fb-9942-5c32df8fd72a" />
+<img width="1911" height="912" alt="uploading" src="https://github.com/user-attachments/assets/000c4397-19bb-48bd-82cc-42cec8601dee" />
+<img width="1918" height="906" alt="Home" src="https://github.com/user-attachments/assets/91748f7b-49b7-4e4c-90b7-6597497bee4d" />
 <div align="center">
 
 # Scout — AI Recruitment Workflow Engine
