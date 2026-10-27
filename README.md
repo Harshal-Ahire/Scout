@@ -4,6 +4,7 @@
 <div align="center">
 
 
+
 <div align="center">
 
 # Scout — AI-Powered Resume Screening Engine
@@ -16,8 +17,6 @@
 [![OCR](https://img.shields.io/badge/OCR-EasyOCR_%7C_Tesseract-FF6F00)](https://github.com/JaidedAI/EasyOCR)
 [![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-
-[**GitHub**](https://github.com/Harshal-Ahire/Scout) · [**Report Bug**](https://github.com/Harshal-Ahire/Scout/issues) · [**Request Feature**](https://github.com/Harshal-Ahire/Scout/issues)
 
 </div>
 
@@ -34,7 +33,6 @@
 - [Tech Stack](#tech-stack)
 - [Getting Started](#getting-started)
 - [Example Usage](#example-usage)
-- [Project Structure](#project-structure)
 - [Roadmap](#roadmap)
 - [License](#license)
 
@@ -42,9 +40,9 @@
 
 ## Overview
 
-Traditional resume parsing tools break down when faced with complex layouts, non-standard formatting, or scanned PDF documents, leading to missing skill profiles and extraction errors.
+Traditional resume parsing tools struggle with complex layouts, non-standard formatting, and scanned PDF documents, often resulting in missing candidate information and extraction errors.
 
-**Scout** is a 4-stage agentic workflow engine designed to reliably ingest, extract, and structure candidate resume data into validated JSON schemas. By combining **EasyOCR** and **Tesseract** for robust text extraction with LLM reasoning via **LangGraph** and the **Gemini API**, Scout automates fallback handling and retry loops to improve extraction reliability and reduce parsing failures.
+**Scout** is a 4-stage agentic workflow engine designed to ingest, extract, and structure resume data into validated JSON schemas. By combining **EasyOCR** and **Tesseract** for text extraction with **LangGraph** and the **Gemini API** for LLM-powered reasoning, Scout automates fallback handling and retry loops to improve extraction reliability and reduce parsing failures.
 
 ---
 
@@ -52,12 +50,12 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 
 | Capability | Description |
 |---|---|
-| **4-Stage Agentic Workflow** | Orchestrated via LangGraph to route documents through parsing, entity extraction, validation, and JSON formatting |
-| **Hybrid OCR Text Extraction** | Integrates EasyOCR and Tesseract engines, achieving 92% text extraction accuracy across real-world resume documents |
-| **Resilient Fallback Loops** | Automated retry and fallback logic that reduces LLM parsing failure rates from 14% to 2% |
-| **Structured JSON Schema Output** | Standardizes unstructured resume text into clean, validated JSON payloads ready for ATS integration |
-| **Flask REST Backend** | Lightweight API endpoints allowing external services to submit resumes and receive structured candidate profiles |
-| **Containerized Deployment** | Dockerized deployment for consistent environments and simplified setup |
+| **4-Stage Agentic Workflow** | Orchestrates resume processing through parsing, entity extraction, validation, and JSON formatting using LangGraph |
+| **Hybrid OCR Text Extraction** | Integrates EasyOCR and Tesseract, achieving 92% text extraction accuracy across tested resume documents |
+| **Resilient Fallback Loops** | Automated retry and fallback logic reduces reported LLM parsing failure rates from 14% to 2% |
+| **Structured JSON Schema Output** | Converts unstructured resume text into validated JSON payloads suitable for applicant tracking system (ATS) integration |
+| **Flask REST Backend** | Provides API endpoints for submitting resumes and retrieving structured candidate profiles |
+| **Containerized Deployment** | Uses Docker for consistent environments and simplified deployment |
 
 ---
 
@@ -80,25 +78,25 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 
 ## Agentic Parsing Pipeline
 
-1. **Document Ingestion & OCR** — Accepts PDF documents and image-based resumes, routing them through EasyOCR and Tesseract to extract textual information. The reported text extraction accuracy is 92% across test documents.
+1. **Document Ingestion & OCR** — Accepts PDF documents and image-based resumes, using EasyOCR and Tesseract to extract textual information.
 
-2. **State Initialization & Routing** — Passes extracted text into a LangGraph state machine designed to manage multi-step processing phases.
+2. **State Initialization & Routing** — Passes extracted text into a LangGraph state machine that manages multi-stage processing and coordinates workflow transitions.
 
-3. **Gemini Entity Extraction** — Uses the Gemini API to identify candidate attributes, including skills, work experience, education, and projects, and map them to structured fields.
+3. **Gemini Entity Extraction** — Uses the Gemini API to identify candidate attributes, including skills, work experience, education, and projects, and maps them to structured fields.
 
-4. **Validation & Retry Loop** — Verifies extracted output against JSON schemas and triggers fallback or retry logic when formatting or extraction errors occur. The reported parsing failure rate drops from 14% to 2%.
+4. **Validation & Retry Loop** — Validates extracted output against JSON schemas and triggers fallback or retry logic when formatting or extraction errors occur.
 
 ---
 
 ## Engineering Highlights
 
-- **Fault-Tolerant State Machines:** Uses LangGraph to handle messy, unstructured inputs and coordinate processing across multiple stages.
+- **Fault-Tolerant State Machines:** LangGraph coordinates processing stages and manages workflow transitions for unstructured resume inputs.
 
-- **Robust OCR Fallback Strategy:** Combines multiple OCR engines to improve text extraction from low-quality scans and image-based resumes.
+- **Robust OCR Fallback Strategy:** Combines EasyOCR and Tesseract to improve text extraction from scanned documents and low-quality images.
 
-- **Strict Schema Enforcement:** Validates extracted data to improve downstream compatibility and triggers corrective processing when output is malformed.
+- **Strict Schema Enforcement:** Validates extracted data and triggers corrective processing when the generated output does not meet the expected schema.
 
-- **Modular Architecture:** Separates workflow orchestration, OCR extraction, state management, and schema validation for easier testing and maintenance.
+- **Modular Processing Pipeline:** Separates workflow orchestration, OCR extraction, state management, and validation to simplify testing and maintenance.
 
 ---
 
@@ -106,11 +104,11 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 
 | Metric | Result | Description |
 |---|---|---|
-| **Text Extraction Accuracy** | 92% | Evaluated across 50 real-world resume documents with diverse layouts |
-| **Parsing Failure Rate** | 14% → 2% | Reduction attributed to automated LLM fallback handling and retry loops |
-| **Workflow Stages** | 4-stage engine | Orchestrated using LangGraph, from document ingestion to validated JSON output |
+| **Text Extraction Accuracy** | 92% | Reported accuracy across 50 resume documents with diverse layouts |
+| **Parsing Failure Rate** | 14% → 2% | Reported reduction through automated fallback handling and retry loops |
+| **Workflow Stages** | 4 stages | LangGraph orchestration from document ingestion to validated JSON output |
 
-*Note: Benchmark figures are reported project metrics. Reproducible evaluation results depend on the test dataset, evaluation criteria, and execution environment.*
+*Note: Performance figures are reported project metrics and should be supported by reproducible benchmark results.*
 
 ---
 
@@ -123,7 +121,7 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 | AI / LLM Engine | Gemini API |
 | Backend Framework | Flask |
 | OCR & Vision | EasyOCR, Tesseract OCR |
-| Data Validation | Pydantic / Custom JSON Schema Validators |
+| Data Validation | Pydantic, Custom JSON Schema Validators |
 | Testing & Quality | pytest |
 | Deployment | Docker, Docker Compose |
 
@@ -134,7 +132,7 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 ### Prerequisites
 
 - Python 3.10+
-- Tesseract OCR installed locally or available through the Docker environment
+- Tesseract OCR installed locally or configured in the Docker environment
 - Docker
 - Docker Compose
 - Gemini API key
@@ -146,7 +144,7 @@ Traditional resume parsing tools break down when faced with complex layouts, non
 git clone https://github.com/Harshal-Ahire/Scout.git
 cd Scout
 
-# Set up environment variables
+# Configure environment variables
 cp .env.example .env
 
 # Add your GEMINI_API_KEY to the .env file
@@ -171,8 +169,6 @@ pytest tests/ -v
 ## Example Usage
 
 ### Submit a Resume for Parsing
-
-The following example submits a PDF resume to the parsing endpoint.
 
 ```bash
 curl -X POST "http://localhost:5000/api/v1/parse" \
@@ -207,31 +203,7 @@ Replace `/path/to/resume.pdf` with the path to your resume file.
 }
 ```
 
-*The response above is illustrative. Actual fields and values depend on the resume content and the API implementation.*
-
----
-
-## Project Structure
-
-```text
-Scout/
-├── app/
-│   ├── main.py                 # Flask application entry point
-│   ├── agents/
-│   │   ├── workflow.py         # LangGraph 4-stage agentic workflow
-│   │   └── state.py            # State definitions and schemas
-│   ├── ocr/
-│   │   └── extractor.py        # EasyOCR and Tesseract integration
-│   └── utils/
-│       └── validators.py       # JSON schema validation and retry logic
-├── tests/
-│   ├── test_ocr.py             # OCR extraction accuracy tests
-│   └── test_workflow.py        # LangGraph routing and retry tests
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-└── README.md
-```
+*The JSON above is an illustrative example. Actual fields and values depend on the resume content and the API implementation.*
 
 ---
 
@@ -241,14 +213,14 @@ Scout/
 - [x] Integrate EasyOCR and Tesseract for text extraction.
 - [x] Implement automated fallback and retry loops.
 - [ ] Expand parser support for multi-page executive CV formats.
-- [ ] Build a lightweight web dashboard for HR candidate review.
+- [ ] Build a lightweight HR dashboard for candidate review.
 - [ ] Expand evaluation coverage across complex resume layouts and document formats.
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
 ---
 
