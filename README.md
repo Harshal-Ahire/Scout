@@ -31,9 +31,6 @@
 - [Engineering Highlights](#engineering-highlights)
 - [Performance & Benchmark Impact](#performance--benchmark-impact)
 - [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Example Usage](#example-usage)
-- [Roadmap](#roadmap)
 - [License](#license)
 
 ---
